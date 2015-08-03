@@ -1,51 +1,53 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <vector>
 
-class GameMap
-{
-  private:
-    unsigned int x_size;
-    unsigned int y_size;
-    std::vector< std::vector< int > > map;
-    GameMap();
-  public:
-    GameMap( unsigned int x, unsigned int y);
-    int dumpMap();
-};
+#include "GameMap.hpp"
+#include "Ship.hpp"
 
 int main()
 {
     std::cout << "Begin" << std::endl;
-    GameMap first( 10, 10);
-    first.dumpMap();
+    GameMap first( 20, 10);
+    std::cout << first.dump();
+    
+    Ship first_ship( 3, Ship::Orientation::Horizontal);
+    std::cout << first_ship.dump();
+    if( first_ship.get_state() != Ship::State::New)
+    {
+        std::cout << "Error: Wrong state. Expected 'New'" << std::endl;
+    }
+    
+    first_ship.hit( 2);
+    std::cout << first_ship.dump();
+    if( first_ship.get_state() != Ship::State::Damaged)
+    {
+        std::cout << "Error: Wrong state. Expected 'Damaged'" << std::endl;
+    }
+    
+    first_ship.hit( 1);
+    first_ship.hit( 0);
+    std::cout << first_ship.dump();
+    if( first_ship.get_state() != Ship::State::Destroyed)
+    {
+        std::cout << "Error: Wrong state. Expected 'Destroyed'" << std::endl;
+    }
 
+    first.hit( 0, 0);
+    first.hit( 0, 1);
+    first.hit( 0, 5);
+    first.hit( 0, 15);
+    first.hit( 0, -1);
+    first.hit( 0, -100);
+    first.hit( 0, 100);
+    first.hit( 1, 0);
+    first.hit( 12, 3);
+    first.hit( -1, 3);
+    first.hit( 100, 0);
+    first.hit( 100, 100);
+    std::cout << first.dump();
     return 0;
 }
 
-GameMap::GameMap( unsigned int x, unsigned int y)
-{
-    x_size = x;
-    y_size = y;
-    map.resize( y_size);
-    for( int i = 0; i < y_size; i++)
-    {
-        map[i].resize( x_size);
-        for( int j = 0; j < x_size;  j++)
-        {
-            map[ i][ j] = 0;
-        }
-    }
-}
-
-int GameMap::dumpMap()
-{
-    for( int i = 0; i < y_size; i++)
-    {
-        for( int j = 0; j < x_size;  j++)
-        {
-            std::cout << map[ i][ j] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
 

@@ -1,3 +1,6 @@
+#ifndef SHIP_HPP
+#define SHIP_HPP
+
 #include <string>
 #include <vector>
 
@@ -22,12 +25,13 @@ class Ship
     State _state;
     
     Ship();
-    std::string state_to_str( State);
     void update_state();
   public:
     Ship( unsigned int new_size, Ship::Orientation new_orientation);
     std::string dump();
     void hit( unsigned int coordinate);
+    std::string state_to_str() const;
     State get_state();
 };
 
+#endif //SHIP_HPP

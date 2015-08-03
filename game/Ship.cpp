@@ -20,7 +20,7 @@ std::string Ship::dump()
     std::stringstream dump_str;
     dump_str << "Ship dump start" << std::endl
              << "size = " << _size << std::endl
-             << "state = " << state_to_str( _state) << std::endl 
+             << "state = " << state_to_str() << std::endl 
              << "Ship:" << std::endl;
     std::string separator;
     if( _orientation == Horizontal)
@@ -56,9 +56,9 @@ void Ship::hit( unsigned int coordinate)
 }
 
 
-std::string Ship::state_to_str( State state)
+std::string Ship::state_to_str() const
 {
-    switch( state)
+    switch( _state)
     {
         case( New): return "New";
         case( Damaged): return "Damaged";
