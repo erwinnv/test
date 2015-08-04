@@ -14,14 +14,15 @@ class GameMap
     unsigned int _x_size;
     unsigned int _y_size;
     std::vector< std::vector< Cell > > _map;
-//    std::vector< Ship > _ships;
+    std::vector< Ship > _ships;
     GameMap();
   public:
     GameMap( unsigned int x, unsigned int y);
     std::string dump() const;
 
     void hit( unsigned int x, unsigned int y);
-//    void add_ship( Ship ship, unsigned int x, unsigned int y);
+    void add_ship( Ship ship, unsigned int x, unsigned int y);
+    bool check_add_ship( Ship ship, unsigned int x, unsigned int y) const;
 };
 
 class GameMap::Cell
@@ -35,12 +36,14 @@ class GameMap::Cell
     };
   private:
     State _state;
-    Ship *_ship;
+    Ship::Part *_part;
   public:
     Cell();
     std::string state_to_str() const;
     State get_state() const;
     void hit();
+    Ship *get_ship_ptr() const;
+    void add_part( Ship::Part *part);
 };
 
 #endif //GAME_MAP_HPP

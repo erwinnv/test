@@ -47,6 +47,20 @@ int main()
     first.hit( 100, 0);
     first.hit( 100, 100);
     std::cout << first.dump();
+    
+    Ship simple( 3, Ship::Horizontal);
+    first.add_ship( simple, 0, 0); 
+    first.add_ship( simple, 6, 0); 
+    first.add_ship( simple, 0, 8); 
+    first.add_ship( simple, 4, 0);
+    first.add_ship( simple, 5, 7);
+    std::cout << first.dump();
+
+    std::cout << "FIRE" << std::endl;
+    first.hit( 0, 7);
+    first.hit( 0, 8);
+    first.hit( 0, 9);
+    std::cout << first.dump();
     return 0;
 }
 
