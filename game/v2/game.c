@@ -27,6 +27,14 @@ int main( int argc, char *argv[])
     map_fire( map, 1, 3);
     map_fire( map, 1, 4);
     map_dump( map);
+    if( map_is_correct( map))
+    {
+        printf( "Map is correct\n");
+    }
+    else
+    {
+        printf( "Map is NOT correct\n");
+    }
     map_delete( map);
 
     printf( "End\n");

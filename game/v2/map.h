@@ -35,7 +35,12 @@ void map_delete( struct map_t *map);
 scalar map_get( struct map_t *map, scalar x, scalar y);
 scalar map_fire( struct map_t *map, scalar x, scalar y);
 
-struct map_t *file_to_new_map( const char * filename);
+struct map_t *file_to_new_map( const char *filename);
+struct map_t *map_get_map_for_enemy( struct map_t *map);
+struct map_t *map_update_enemy_map( struct map_t *dst, struct map_t *src);
+
+scalar map_is_correct( struct map_t *map); 
+
 
 int map_dump( struct map_t *map);
 
