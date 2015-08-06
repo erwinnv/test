@@ -10,11 +10,9 @@ enum Const
 {
     Search_mark = 's',
     Bad_map = 'B',
-    Max_ship_size = 4,
 };
 
 const scalar Ship_sizes[ Max_ship_size+1] = { 0, 4, 3, 2, 1};
-//Ships[ length] - expected count of ships with length 
 
 scalar map_set( struct map_t *map, scalar x, scalar y, scalar val);
 scalar map_check_ship( struct map_t *map, scalar x, scalar y);
@@ -83,6 +81,8 @@ scalar map_set( struct map_t *map, scalar x, scalar y, scalar val)
 int map_dump( struct map_t *map)
 {
     printf( "Map dump start\n");
+    printf( "x_size = %d\n", map->x_size);
+    printf( "y_size = %d\n", map->y_size);
     for( int j = 0; j < map->y_size; j++)
     {
         for( int i = 0; i < map->x_size; i++)
@@ -95,6 +95,22 @@ int map_dump( struct map_t *map)
     return 0;
 }
 
+int map_dump_scalar( struct map_t *map)
+{
+    printf( "Map dump start\n");
+    printf( "x_size = %d\n", map->x_size);
+    printf( "y_size = %d\n", map->y_size);
+    for( int j = 0; j < map->y_size; j++)
+    {
+        for( int i = 0; i < map->x_size; i++)
+        {
+            printf( "%2d ", map_get( map, i, j));
+        }
+        printf( "\n");
+    }
+    printf( "Map dump end\n");
+    return 0;
+}
 
 scalar map_fire( struct map_t *map, scalar x, scalar y)
 {

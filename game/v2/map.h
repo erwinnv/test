@@ -22,6 +22,14 @@ enum field
     Out_of_range = 0, //should be 0, used in if()
 };
 
+enum Const_h
+{
+    Max_ship_size = 4,
+};
+extern const scalar Ship_sizes[];
+//Ships[ length] - expected count of ships with length 
+
+
 struct map_t
 {
     char *ptr;
