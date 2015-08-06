@@ -9,7 +9,12 @@ enum
     Y_size = 10,
 };
 
-struct map_t *place_all_ships( struct map_t *map,
+struct map_t *place_all_ships_full( struct map_t *map,
+                           struct map_t *mask_map,
+                           scalar *ships,
+                           scalar biggest_ship_size,
+                           scalar rank);
+struct map_t *fill_with_ships_random( struct map_t *map,
                            struct map_t *mask_map,
                            scalar *ships,
                            scalar biggest_ship_size,

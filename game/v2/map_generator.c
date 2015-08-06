@@ -1,6 +1,7 @@
 #include "map_generator.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "map.h"
 #include "tools.h"
@@ -12,11 +13,16 @@ scalar counter = 0;
 enum
 {
     Not_ship,
-    Horizontal = 7,
+    Horizontal = 0,
     Vertical = 1,
 };
 
-struct map_t *place_all_ships( struct map_t *map,
+struct map_t *fill_with_ships_random( struct map_t *map,
+                           struct map_t *mask_map,
+                           scalar *ships,
+                           scalar biggest_ship_size,
+                           scalar rank);
+struct map_t *place_all_ships_full( struct map_t *map,
                            struct map_t *mask_map,
                            scalar *ships,
                            scalar biggest_ship_size,
@@ -28,13 +34,61 @@ struct map_t *place_ship( struct map_t *map,
                           scalar x, scalar y,
                           scalar rank);
 struct map_t *remove_ship( struct map_t *map, 
-                          struct map_t *mask_map,
-                          scalar ship_size,
-                          scalar ship_orientation,
-                          scalar x, scalar y,
-                          scalar rank);
+                           struct map_t *mask_map,
+                           scalar ship_size,
+                           scalar ship_orientation,
+                           scalar x, scalar y,
+                           scalar rank);
 scalar update_rank( struct map_t *map, scalar x, scalar y, scalar rank);
 scalar remove_rank( struct map_t *map, scalar x, scalar y, scalar rank);
+
+struct map_t *fill_with_ships_random( struct map_t *map,
+                           struct map_t *mask_map,
+                           scalar *ships,
+                           scalar biggest_ship_size,
+                           scalar rank)
+{
+    if( biggest_ship_size == 0)
+    {
+        return map;
+    }
+    if( ships[ biggest_ship_size] == 0)
+    {
+        biggest_ship_size--;
+        return fill_with_ships_random( map, mask_map, ships, biggest_ship_size, rank+1);
+    }
+    ships[ biggest_ship_size]--;
+    scalar placed = 0;
+
+    for( int i = 0; i < 100; i++)
+    {
+        scalar x = get_random_scalar( map->x_size);
+        scalar y = get_random_scalar( map->y_size);
+        scalar orientation = get_random_scalar( 2);
+
+        if( place_ship( map, mask_map, biggest_ship_size, 
+            orientation, x, y, rank+1) != NULL)
+        {
+            placed++;
+            struct map_t *result = fill_with_ships_random( map, mask_map, 
+                                       ships, biggest_ship_size, rank+1);
+            if( result != NULL)
+            {
+                return result;
+            }
+            fprintf( stderr, "Good Luck!!\n");
+            remove_ship( map, mask_map, biggest_ship_size,
+            orientation, x, y, rank+1);
+            placed--;
+        }
+    }
+    ships[ biggest_ship_size]++;
+    if( placed == 0)
+    {
+        return NULL;
+    }
+    return map;
+}
 
 scalar update_rank( struct map_t *map, scalar x, scalar y, scalar rank)
 {
@@ -57,11 +111,11 @@ scalar remove_rank( struct map_t *map, scalar x, scalar y, scalar rank)
 }
 
 struct map_t *remove_ship( struct map_t *map, 
-                          struct map_t *mask_map,
-                          scalar ship_size,
-                          scalar ship_orientation,
-                          scalar x, scalar y,
-                          scalar rank)
+                           struct map_t *mask_map,
+                           scalar ship_size,
+                           scalar ship_orientation,
+                           scalar x, scalar y,
+                           scalar rank)
 {
     if( ship_orientation == Vertical)
     {
@@ -269,7 +323,7 @@ struct map_t *new_correct_map_from_scalar_array( scalar *seed, scalar size)
     if( expected_ship_parts_count != ships_parts_count)
     {
         printf( "Error: wrong ship parts count\n");
-        printf( "       expected: %d, got: %d\n",
+        printf( "       expected: %u, got: %u\n",
                 expected_ship_parts_count, ships_parts_count);
         return NULL;
     }
